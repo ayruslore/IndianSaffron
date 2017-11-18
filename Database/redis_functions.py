@@ -155,8 +155,7 @@ def ss_range(key,start,end):
 	items = result[::2]
 	scores = result[1::2]
 	result = {}
-	for i in range(len(items)):
-		result[items[i]] = scores[i]
+	result[items[i]] = scores[i]
 	return result
 
 def ss_member_add(key, member, score):
@@ -218,7 +217,7 @@ def persist_key(key):
 global dishes_dicti
 stream = open('products.txt','r')
 dishes_dicti = {}
-for line in stream.readlines():
+'''for line in stream.readlines():
 	line = line.split()
 	a = ('_').join(line[:-1]).lower()
 	b = line[-1]
@@ -226,7 +225,7 @@ for line in stream.readlines():
 		dishes_dicti[a] += int(b)
 	else:
 		dishes_dicti[a] = int(b)
-
+'''
 global dishes_db
 
 
@@ -246,8 +245,8 @@ def recommend_dishes7(dishes_db,v_n,base,category):
 	v_cards = int(10 * v_n)
 	n_cards = 10 - v_cards
 	cards = []
-	result_veg = dishes_db[dishes_db["category"]!="bread"]
-	result_non_veg = dishes_db[dishes_db["category"]!="bread"]
+	result_veg = dishes_db[dishes_db["category"]!="U"]
+	result_non_veg = dishes_db[dishes_db["category"]!="U"]
 	result_veg = result_veg[result_veg["v_n"]=="veg"]
 	result_non_veg = result_non_veg[result_non_veg["v_n"]=="nonveg"]
 	for i in range(v_cards):
@@ -279,8 +278,8 @@ def recommend_dishes(v_n,base,category):
 	n_cards = 10 - v_cards
 	cards = []
 	global dishes_db
-	result_veg = dishes_db[dishes_db["category"]!="bread"]
-	result_non_veg = dishes_db[dishes_db["category"]!="bread"]
+	result_veg = dishes_db[dishes_db["category"]!="U"]
+	result_non_veg = dishes_db[dishes_db["category"]!="U"]
 	result_veg = result_veg[result_veg["v_n"]=="veg"]
 	result_non_veg = result_non_veg[result_non_veg["v_n"]=="nonveg"]
 	for i in range(v_cards):

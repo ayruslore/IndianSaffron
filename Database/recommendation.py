@@ -35,7 +35,7 @@ def reco_filter1(v_n,base_ing,category):
 		result = result[result["v_n"]==v_n]
 	if base_ing in ["chicken","mutton","dal","egg","aloo","soya","curd","rice","paneer"]:
 		result = result[result["base_ing"]==base_ing]
-	if category in ["roll","rice","roti","dahi","curry","soup","kebab","dessert"]:
+	if category in ["kathi_roll","rice","roti_parantha","dahi","curry","shorba","kebab","dessert"]:
 		result = result[result["category"]==category]
 	result = {"reco": result['name'].tolist()[:5],"links":result['link'].tolist()[:5],"prices":result['price'].tolist()[:5]}
 	yield json.dumps(result)
@@ -47,7 +47,7 @@ def reco_filter(v_n,base_ing,category):
 		result = result[result["v_n"]==v_n]
 	if base_ing in ["chicken","mutton","dal","egg","aloo","soya","curd","rice","paneer"]:
 		result = result[result["base_ing"]==base_ing]
-	if category in ["roll","rice","roti","dahi","curry","soup","kebab","dessert"]:
+	if category in ["kathi_roll","rice","roti_parantha","dahi","curry","shorba","kebab","dessert"]:
 		result = result[result["category"]==category]
 	result = {"reco": result['name'].tolist()[:5],"links":result['link'].tolist()[:5],"prices":result['price'].tolist()[:5]}
 	return result
@@ -166,9 +166,9 @@ def user_details(identity):
 			result["usual"] = "Nothing"
 		yield json.dumps(result)
 #Courses Category
-#Shorba   soup
+#Shorba   shorba
 #Kebab    kebab
-#Kathi Rolls  roll
+#Kathi Rolls  kathi_roll
 #Curries curry
 #Dal  dal
 #Rice  rice
@@ -183,7 +183,7 @@ def store_the_dishes():
 ["255","Veg","corn"],"Achari Paneer Tikka":
 ["255","Veg","paneer"],"Bharwan Tandoori Aloo":
 ["255","Veg","aloo"],"Soya Chaap":
-["245","Veg","soya"],"Nooranti Tangri Kebab":
+["245","Veg","soya"],"Noorani Tangri Kebab":
 ["315","Non Veg","chicken"],"Mutton Gilafi Seekh Kebab":
 ["315","Non Veg","mutton"],"Mutton Burrah":
 ["315","Non Veg","mutton"],"Murg Tikka":
@@ -244,11 +244,11 @@ def store_the_dishes():
 		for dish in temp["Courses"][course]:
 			dishes_db_new["course"].append(course)
 			if(course == "Shorba"):
-				dishes_db_new["category"].append("soup")
+				dishes_db_new["category"].append("shorba")
 			elif(course == "Kebab"):
 				dishes_db_new["category"].append("kebab")
 			elif(course == "Kathi Rolls"):
-				dishes_db_new["category"].append("roll")
+				dishes_db_new["category"].append("kathi_roll")
 			elif(course == "Curries"):
 				dishes_db_new["category"].append("curry")
 			elif(course == "Dal"):
@@ -256,7 +256,7 @@ def store_the_dishes():
 			elif(course == "Rice"):
 				dishes_db_new["category"].append("rice")
 			elif(course == "Roti Parantha"):
-				dishes_db_new["category"].append("roti")
+				dishes_db_new["category"].append("roti_parantha")
 			elif(course == "Dahi"):
 				dishes_db_new["category"].append("dahi")
 			elif(course == "Dessert"):
