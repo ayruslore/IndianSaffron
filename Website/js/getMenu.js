@@ -1,13 +1,25 @@
-var DATA;
+var DATA={"Courses": {}};
 var uid;
+var keys=[];
 
 function getMenu(){
+  function toTitleCase(str){
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+  }
   $.ajax({
     type: "GET",
     url: redisDb+"/get_menu",
     success: function(data){
-      console.log('Success!');
-      DATA=data;
+      var x=JSON.parse(data);
+      console.log(x);
+      for(var i=0; i<x.length; i++)
+        DATA["Courses"][x[i]["course"]]={};
+      for(var i=0; i<x.length; i++)
+        DATA["Courses"][x[i]["course"]][toTitleCase(x[i]["name"].replace(/_/g, ' '))]=[x[i]["price"], x[i]["v_n"]];
+      console.log(DATA);
+      for(var key in DATA["Courses"])
+        keys.push(key);
+
       populate();
       viewMenu();
       courses();

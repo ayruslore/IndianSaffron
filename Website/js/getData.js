@@ -41,7 +41,7 @@ function getData2(){
     var hd1=document.createElement("H3");
     hd1.className="item-title column";
     hd1.innerHTML=dish[i]+" (&#8377;"+DATA["Courses"][course[i]][dish[i]][0]*qty[i]+")";
-    if(DATA["Courses"][course[i]][dish[i]][1]=="Veg")
+    if(DATA["Courses"][course[i]][dish[i]][1]=="veg")
       hd1.style.color="green";
     else
       hd1.style.color="red";

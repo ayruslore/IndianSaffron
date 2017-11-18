@@ -19,11 +19,11 @@ function searchDish(){
     console.log(DATA["Courses"][keys[i]]);
     for(var key in DATA["Courses"][keys[i]]){
       if((key.toUpperCase()).indexOf(searchField.toUpperCase())!=-1){
-        if(veg==1 & DATA["Courses"][keys[i]][key][1]=="Veg"){
+        if(DATA["Courses"][keys[i]][key][1]=="veg"){
           srch.push(key);
           srchCourse.push(keys[i]);
         }
-        else if(veg==0){
+        else{
           srch.push(key);
           srchCourse.push(keys[i]);
         }
@@ -63,7 +63,7 @@ function searchDish(){
     var hd1=document.createElement("H3");
     hd1.className="item-title column";
     hd1.innerHTML=srch[i]+" (&#8377;"+DATA["Courses"][srchCourse[i]][srch[i]][0]+")";
-    if(DATA["Courses"][srchCourse[i]][srch[i]][1]=="Veg")
+    if(DATA["Courses"][srchCourse[i]][srch[i]][1]=="veg")
       hd1.style.color="green";
     else
       hd1.style.color="red";

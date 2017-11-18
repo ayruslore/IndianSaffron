@@ -1,7 +1,3 @@
-var keys=[];
-for(var key in DATA["Courses"])
-  keys.push(key);
-
 //keys[i]=course
 //key=dish name
 //DATA["Courses"][keys[i]][key][0]=Veg/Non Veg
@@ -54,8 +50,6 @@ function viewMenu(){
     var d7=document.createElement("DIV");
     d7.className="shopping-cart"
     for(var key in DATA["Courses"][keys[i]]){
-      if(veg==1 & DATA["Courses"][keys[i]][key][1]=="Non Veg")
-        continue;//sole.log(key);
       //<div class="item">
       var d1=document.createElement("DIV");
       d1.className="item";
@@ -76,7 +70,7 @@ function viewMenu(){
       var hd1=document.createElement("H3");
       hd1.className="item-title column";
       hd1.innerHTML=key+" (&#8377;"+DATA["Courses"][keys[i]][key][0]+")";
-      if(DATA["Courses"][keys[i]][key][1]=="Veg")
+      if(DATA["Courses"][keys[i]][key][1]=="veg")
         hd1.style.color="green";
       else
         hd1.style.color="red";
