@@ -9,6 +9,7 @@ import razorpay
 import googlemaps
 from datetime import datetime
 import random
+import requests
 
 import redis_functions as rd
 from redis_functions import *
@@ -23,14 +24,14 @@ app = bottle.app()
 @app.route('/recommend')
 def reco():
 	global dishes_db
-	result = dishes_db
+	result = dishes_db[dishes_db['stock']=='In']
 	result = {"reco": result['name'].tolist()[:5],"links":result['link'].tolist()[:5],"prices":result['price'].tolist()[:5]}
 	yield json.dumps(result)
 
 @app.route('/recommend/<v_n>/<base_ing>/<category>')
 def reco_filter1(v_n,base_ing,category):
 	global dishes_db
-	result = dishes_db
+	result = dishes_db[dishes_db['stock']=='In']
 	if v_n in ["veg","nonveg"]:
 		result = result[result["v_n"]==v_n]
 	if base_ing in ["chicken","mutton","dal","egg","aloo","soya","curd","rice","paneer"]:
@@ -42,7 +43,7 @@ def reco_filter1(v_n,base_ing,category):
 
 def reco_filter(v_n,base_ing,category):
 	global dishes_db
-	result = dishes_db
+	result = dishes_db[dishes_db['stock']=='In']
 	if v_n in ["veg","nonveg"]:
 		result = result[result["v_n"]==v_n]
 	if base_ing in ["chicken","mutton","dal","egg","aloo","soya","curd","rice","paneer"]:
@@ -59,7 +60,7 @@ def special():
 	result = {"reco": result['name'].tolist()[:5],"links":result['link'].tolist()[:5],"prices":result['price'].tolist()[:5]}
 	yield json.dumps(result)
 	'''
-	result = dishes_db
+	result = dishes_db[dishes_db['stock']=='In']
 	print result
 	print "\n\n\n"
 	result = result[result["category"]=="dessert"]
@@ -77,7 +78,7 @@ def get_recommend_dishes2(identity):
 		print dik
 		yield json.dumps(dik)
 	else:
-		di = dishes_db
+		di = dishes_db[dishes_db['stock']=='In']
 		dishes_list = get_history_reco3(di,identity)
 		recommendation = {"reco": [],"links":[],"prices":[]}
 		for dish in dishes_list:
@@ -96,6 +97,7 @@ def get_recommend_dishes(identity):
 		dishes_list = get_history_reco(identity)
 		recommendation = {"reco": [],"links":[],"prices":[]}
 		for dish in dishes_list:
+			#dishes_db[dishes_db[dishes_db['stock']=='In']['name']==dish]
 			result = dishes_db[dishes_db["name"] == dish]
 			recommendation["reco"].append(result["name"].tolist()[0])
 			recommendation["prices"].append(result["price"].tolist()[0])
@@ -307,7 +309,43 @@ def logger(message):
 	fil.write(message + "\n")
 	return "Success"
 
+@app.route('/addingdish/<d>')
+def add_dish(d):
+	global dishes_db
+	df = pd.read_json(d, orient = 'records')
+	for row in df.itertuples():
+		row.link.replace("_","/")
+	#print(dishes_db)
+	dishes_db = dishes_db.append(df,ignore_index=True)
+	return json.dumps('Success')
+
+@app.route('/deleteingdish/<name>')
+def delete_dish(name):
+	global dishes_db
+	name = json.loads(name)
+	for nam in name:
+		dishes_db = dishes_db[dishes_db.name != str(nam)]
+	return json.dumps('Success')
+
+@app.route('/outofstock/<dname>')
+def outstocking(dname):
+	global dishes_db
+	dname = dname.lower().replace(" ","_")
+	dishes_db.loc[dishes_db['name']==dname,'stock'] = 'Out'
+	print dname
+	print dishes_db
+	return json.dumps('Success')
+
+@app.route('/refreshing')
+def refresh_stock():
+	global dishes_db
+	dishes_db = dishes_db.replace("Out","In")
+	print dishes_db
+	return json.dumps('Success')
+
+
+
 store_the_dishes()
 app.install(EnableCors())
 
-app.run(host='0.0.0.0', port=3000, debug=True, server='gevent')
+app.run(host='0.0.0.0', port=4000, debug=True, server='gevent')

@@ -483,6 +483,9 @@ def display():
 
 @app.route('/add_dish/<d>')
 def add_dish(d):
+	u = 'http://0.0.0.0:4000/addingdish/'
+	h ={ 'content-type': 'application/json; charset=utf-8'}
+	r = requests.get(url=u+d,headers=h)
 	global dishes_db
 	df = pd.read_json(d, orient = 'records')
 	for row in df.itertuples():
@@ -504,6 +507,9 @@ def add_dish(d):
 @app.route('/delete_dish/<name>')
 def delete_dish(name):
 	global dishes_db
+	u = 'http://0.0.0.0:4000/deletingdish/'
+	h ={ 'content-type': 'application/json; charset=utf-8'}
+	r = requests.get(url=u+name,headers=h)
 	name = json.loads(name)
 	for nam in name:
 		dishes_db = dishes_db[dishes_db.name != str(nam)]
@@ -890,13 +896,19 @@ def set_confirm(identity,d):
 def refresh_stock():
 	global dishes_db
 	dishes_db = dishes_db.replace("Out","In")
+	u = 'http://0.0.0.0:4000/refreshing'
+	h ={ 'content-type': 'application/json; charset=utf-8'}
+	r = requests.get(url=u,headers=h)
 	print dishes_db
 
 @app.route('/outofstock/<dname>')
 def outstock(dname):
 	dname = dname.lower().replace(" ","_")
 	dishes_db.loc[dishes_db['name']==dname,'stock'] = 'Out'
-	print dishes_db
+	u = 'http://0.0.0.0:4000/outofstock/'
+	h ={ 'content-type': 'application/json; charset=utf-8'}
+	r = requests.get(url=u+dname,headers=h)
+	#print dishes_db
 	return "Success"
 
 i1 = open('dishes15.txt','r').read()
