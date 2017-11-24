@@ -317,14 +317,14 @@ function ordr(data, loc){
   }
 }
 
-function yel(){
-  document.getElementById("accordionyel").innerHTML="";
+function saffron(){
+  document.getElementById("accordionis_1").innerHTML="";
   $.ajax({
-    url: redisDb+'/read_orders_Y',
+    url: redisDb+'/read_orders',
     success: function(data) {
       data=JSON.parse(data);
       console.log(data);
-      ordr(data, "yel");
+      ordr(data, "is_1");
     },
     error: function(data){
       console.log(data);
