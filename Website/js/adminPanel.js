@@ -331,3 +331,21 @@ function yel(){
     }
   });
 }
+
+function discount(){
+  var disc=document.getElementById('discount_per').value;
+  if(disc<0 & disc>80){
+    alert("Discount % not allowed!");
+    return;
+  }
+  $.ajax({
+    url: redisDb+'/discount/'+disc,
+    success: function(data) {
+      console.log(data);
+      alert("Discount added! Enter 0 to remove the discount!");
+    },
+    error: function(data){
+      console.log(data);
+    }
+  });
+}

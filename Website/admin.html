@@ -92,6 +92,7 @@
               <a href='#' onclick="openCourse2(event, 'addDish')">Add Dish</a>
               <a href='#' onclick="openCourse2(event, 'removeDish')">Remove Dish</a>
               <a href='#' onclick="openCourse2(event, 'addCourse')">Add Course</a>
+              <a href='#' onclick="openCourse2(event, 'discount')">Add Discount Percent</a>
             </div><!-- .widget.widget-price -->
 
             <div class="tabcontent2" id="addDish">
@@ -182,6 +183,13 @@
                 <input class="form-control col-sm-6" id="course_name" type="text" placeholder="Course Name">
                 <a href="#" class="btn btn-pill btn-primary waves-effect waves-light" onclick="addCo()">Add Course</a>
             </div>
+
+            <div class="tabcontent2" id="discount">
+              <h4 class="toolbar-title">Add Discount Percent</h4>
+                <input class="form-control col-sm-6" id="discount_per" type="number" placeholder="Discount Percent">
+                <a href="#" class="btn btn-pill btn-primary waves-effect waves-light" onclick="discount()">Submit</a>
+            </div>
+
           </div>
 
           <div class="tabcontent" id="order">
