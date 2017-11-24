@@ -23,7 +23,7 @@ function checkout(){
 function sender(dish, qty){
   cartJSON={};
   for(var i=0; i<dish.length; i++)
-    cartJSON[dish[i].replace(/ /g, '_').toLowerCase()]=qty[i];
+    cartJSON[dish[i].replace(/ /g, '_').toLowerCase()]=""+qty[i];
   cartJSON=JSON.stringify(cartJSON);
 }
 
