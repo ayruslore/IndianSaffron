@@ -25,7 +25,6 @@ function getMenu(){
       courses();
       courses2();
       document.getElementById("course1").click();
-
     },
     error: function(data){
       console.log('Nope!');
