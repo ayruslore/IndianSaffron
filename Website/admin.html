@@ -92,7 +92,6 @@
               <a href='#' onclick="openCourse2(event, 'addDish')">Add Dish</a>
               <a href='#' onclick="openCourse2(event, 'removeDish')">Remove Dish</a>
               <a href='#' onclick="openCourse2(event, 'addCourse')">Add Course</a>
-              <a href='#' onclick="openCourse2(event, 'removeCourse')">Remove Course</a>
             </div><!-- .widget.widget-price -->
 
             <div class="tabcontent2" id="addDish">
@@ -165,17 +164,17 @@
                 </div>
               None
               </label>
-              <h5 id="courses" class="text-uppercase text-gray text-thin space-bottom">Select Course</h5>
-                <script>//addD("courses");</script>
+              <h5 id="addDish_" class="text-uppercase text-gray text-thin space-bottom">Select Course</h5>
+                <script>//addD("addDish_");</script>
               <a href="#" class="btn btn-pill btn-primary waves-effect waves-light" onclick="addDi()">Add Dish</a>
             </div>
 
             <div class="tabcontent2" id="removeDish">
               <h4 class="toolbar-title">Remove Dish</h3>
-              <h5 id="courses2" class="text-uppercase text-gray text-thin space-bottom">Select Course</h5>
+              <h5 id="removeDish_" class="text-uppercase text-gray text-thin space-bottom">Select Course</h5>
                 <script>//addD("courses2");</script>
               <a href="#" id="removeDish123" class="btn btn-pill btn-primary waves-effect waves-light" onclick="removeDi()">Select</a>
-              <span id="dishes"></span>
+              <span id="removeDish_2"></span>
             </div>
 
             <div class="tabcontent2" id="addCourse">
@@ -183,15 +182,6 @@
                 <input class="form-control col-sm-6" id="course_name" type="text" placeholder="Course Name">
                 <a href="#" class="btn btn-pill btn-primary waves-effect waves-light" onclick="">Add Course</a>
             </div>
-
-            <div class="tabcontent2" id="removeCourse">
-              <h4 class="toolbar-title">Remove Course</h3>
-              <h5 id="courses3" class="text-uppercase text-gray text-thin space-bottom">Select Course</h5>
-              <script>//addD("courses3");</script>
-              <a class="btn btn-ghost btn-pill btn-danger waves-effect waves-light">Remove Course!</a>
-            </div>
-
-            <a href="#" class="btn btn-pill btn-primary waves-effect waves-light" onclick="submitChanges()">Update Menu</a>
           </div>
 
           <div class="tabcontent" id="order">

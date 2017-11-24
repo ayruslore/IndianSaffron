@@ -13,7 +13,7 @@ $.ajax({
       DATA["Courses"][x[i]["course"]][toTitleCase(x[i]["name"].replace(/_/g, ' '))]=[x[i]["price"], x[i]["v_n"], x[i]["stock"]];
     console.log(DATA);
     for (var key in DATA["Courses"])
-    keys.push(key);
+      keys.push(key);
 
     viewMenu();
   },
@@ -88,36 +88,14 @@ function viewMenu(){
     }
     document.getElementById("display").appendChild(cou);
   }
-  /*
-  for(var i in keys)(function(i){
-    //console.log(keys[i]);
-    document.getElementById("display").innerHTML+="<br><br><strong>"+keys[i]+"<strong><br>";
-    for(var key in DATA["Courses"][keys[i]])(function(key){
-      var dis=document.createElement("A");
-      dis.onclick=function(){
-        changeAvail(this.parent, key);
-      }
-      //console.log(key);
-      dis.innerHTML=key+" - Rs. "+ DATA["Courses"][keys[i]][key][0] +" - "+DATA["Courses"][keys[i]][key][1];
-      if(DATA["Courses"][keys[i]][key][2]=="In")
-        //document.getElementById("display").innerHTML+='<a href="#" class="btn btn-pill btn-primary waves-effect waves-light" onclick="changeAvail("'+key+'")">'+key+" - Rs. "+DATA["Courses"][keys[i]][key][0]+" - "+DATA["Courses"][keys[i]][key][1]+'</a>';
-        dis.className="btn btn-pill btn-primary waves-effect waves-light";
-      else
-        //document.getElementById("display").innerHTML+='<a href="#" class="btn btn-pill btn-danger waves-effect waves-light" onclick="changeAvail("'+key+'")">Update Menu</a>';
-        dis.className="btn btn-pill btn-danger waves-effect waves-light";
-      document.getElementById("display").appendChild(dis);
-    })(key);
-  })(i);
-  */
-  addD('courses');
-  addD('courses2');
-  addD('courses3');
+  addD("addDish_");
+  addD("removeDish_");
 }
 
 function changeAvail(c, d){
-  if(DATA["Courses"][c][d][2]=="Out") return;
+  if(DATA["Courses"][c][d][2]=="Out") DATA["Courses"][c][d][2]="In";
+  else DATA["Courses"][c][d][2]="Out";
   console.log(d.replace(/ /g, '_').toLowerCase());
-  DATA["Courses"][c][d][2]="Out";
   $.ajax({
     type: "GET",
     url: redisDb+"/outofstock/"+d.replace(/ /g, '_').toLowerCase(),
