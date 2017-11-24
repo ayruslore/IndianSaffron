@@ -1,5 +1,5 @@
   function addD(id_){
-    document.getElementById(id_).innerHTML+="<br>";
+    document.getElementById(id_).innerHTML="SELECT COURSE<br>";
     for(var i=0; i<keys.length; i++){
       var i1=document.createElement("INPUT");
       i1.setAttribute("type", "radio");
@@ -117,7 +117,7 @@ function remoD(keys2, course){
   xyz=JSON.stringify(xyz);
   $.ajax({
     type: "GET",
-    url: redisDb+"/delete_dish/["+xyz.replace(/ /g, '_')+"]",
+    url: redisDb+"/delete_dish/"+xyz.replace(/ /g, '_').toLowerCase(),
     success: function(data){
       alert(rate_value+" Removed!");
       console.log(data);

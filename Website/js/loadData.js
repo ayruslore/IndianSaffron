@@ -70,6 +70,7 @@ function viewMenu(){
       var hd1=document.createElement("H3");
       hd1.className="item-title column";
       hd1.innerHTML=key+" (&#8377;"+DATA["Courses"][keys[i]][key][0]+")";
+      if(DATA["Courses"][keys[i]][key][2]=="Out") hd1.innerHTML+="  ---  OUT OF STOCK";
       if(DATA["Courses"][keys[i]][key][1]=="veg")
         hd1.style.color="green";
       else
@@ -83,30 +84,32 @@ function viewMenu(){
       d2.appendChild(hd2);
       */
       //<div class="count-input">
-      var d3=document.createElement("DIV");
-      d3.className="count-input column";
-      //<a class="incr-btn" data-action="decrease" href="#">–</a>
-      var a2=document.createElement("A");
-      a2.className="incr-btn";
-      a2.setAttribute("data-action", "decrease");
-      a2.href='#';
-      a2.innerHTML='-';
-      d3.appendChild(a2);
-      //<input class="quantity" name="c1_10" type="text" value="0">
-      var i1=document.createElement("INPUT");
-      i1.setAttribute("type", "text");
-      i1.className="quantity";
-      i1.value=0;
-      i1.name=key;
-      d3.appendChild(i1);
-      //<a class="incr-btn" data-action="increase" href="#">+</a>
-      var a3=document.createElement("A");
-      a3.className="incr-btn";
-      a3.setAttribute("data-action", "increase");
-      a3.href='#';
-      a3.innerHTML='+';
-      d3.appendChild(a3);
-      d2.appendChild(d3);
+      if(DATA["Courses"][keys[i]][key][2]=="In"){
+        var d3=document.createElement("DIV");
+        d3.className="count-input column";
+        //<a class="incr-btn" data-action="decrease" href="#">–</a>
+        var a2=document.createElement("A");
+        a2.className="incr-btn";
+        a2.setAttribute("data-action", "decrease");
+        a2.href='#';
+        a2.innerHTML='-';
+        d3.appendChild(a2);
+        //<input class="quantity" name="c1_10" type="text" value="0">
+        var i1=document.createElement("INPUT");
+        i1.setAttribute("type", "text");
+        i1.className="quantity";
+        i1.value=0;
+        i1.name=key;
+        d3.appendChild(i1);
+        //<a class="incr-btn" data-action="increase" href="#">+</a>
+        var a3=document.createElement("A");
+        a3.className="incr-btn";
+        a3.setAttribute("data-action", "increase");
+        a3.href='#';
+        a3.innerHTML='+';
+        d3.appendChild(a3);
+        d2.appendChild(d3);
+      }
       d1.appendChild(d2);
       /*
       //<div class="count-input">
