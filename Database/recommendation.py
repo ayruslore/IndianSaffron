@@ -56,18 +56,20 @@ def reco_filter(v_n,base_ing,category):
 @app.route('/specials')
 def special():
 	global dishes_db
-	'''result = dishes_db
-	result = {"reco": result['name'].tolist()[:5],"links":result['link'].tolist()[:5],"prices":result['price'].tolist()[:5]}
-	yield json.dumps(result)
-	'''
-	result = dishes_db[dishes_db['stock']=='In']
+	specials = ['makai_ke_kebab','noorani_tangri_kebab','mirch_ka_salan','chicken_wings_masala']
+	print specials
+	#result = dishes_db[dishes_db['stock']=='In']
+	#print result
+	result = {"reco":[],"links":[],"prices":[]}
+	for dish in specials:
+		print dish
+		res = dishes_db[dishes_db["name"] == dish]
+		print res
+		result["reco"].append(res["name"].tolist()[0])
+		result["prices"].append(res["price"].tolist()[0])
+		result["links"].append(res["link"].tolist()[0])
 	print result
-	print "\n\n\n"
-	result = result[result["category"]=="dessert"]
-	print result
-	result = {"reco": result['name'].tolist()[:5],"links":result['link'].tolist()[:5],"prices":result['price'].tolist()[:5]}
 	yield json.dumps(result)
-
 
 @app.route('/<identity>/get_history_reco')
 def get_recommend_dishes2(identity):
@@ -268,7 +270,7 @@ def store_the_dishes():
 
 			dishes_db_new["name"].append(dish.replace(" ","_").lower().replace("(","").replace(")",""))
 			dishes_db_new["stock"].append("In")
-			s = 'http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/img/db/'
+			s = 'http://ec2-13-126-89-61.ap-south-1.compute.amazonaws.com/img/db/'
 			dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","") + ".jpg")
 
 			if dish in dishes_dicti:
@@ -319,7 +321,7 @@ def add_dish(d):
 	dishes_db = dishes_db.append(df,ignore_index=True)
 	return json.dumps('Success')
 
-@app.route('/deleteingdish/<name>')
+@app.route('/deletingdish/<name>')
 def delete_dish(name):
 	global dishes_db
 	name = json.loads(name)
@@ -331,7 +333,10 @@ def delete_dish(name):
 def outstocking(dname):
 	global dishes_db
 	dname = dname.lower().replace(" ","_")
-	dishes_db.loc[dishes_db['name']==dname,'stock'] = 'Out'
+	if(dishes_db[dishes_db['name']==dname]['stock'].tolist()[0]== 'In'):
+		dishes_db.loc[dishes_db['name']==dname,'stock'] = 'Out'
+	elif(dishes_db[dishes_db['name']==dname]['stock'].tolist()[0]== 'Out'):
+		dishes_db.loc[dishes_db['name']==dname,'stock'] = 'In'
 	print dname
 	print dishes_db
 	return json.dumps('Success')
@@ -348,4 +353,4 @@ def refresh_stock():
 store_the_dishes()
 app.install(EnableCors())
 
-app.run(host='0.0.0.0', port=4000, debug=True, server='gevent')
+app.run(host='0.0.0.0', port=7000, debug=True, server='gevent')

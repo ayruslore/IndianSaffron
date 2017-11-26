@@ -483,14 +483,14 @@ def display():
 
 @app.route('/add_dish/<d>')
 def add_dish(d):
-	u = 'http://0.0.0.0:4000/addingdish/'
+	u = 'http://0.0.0.0:7000/addingdish/'
 	h ={ 'content-type': 'application/json; charset=utf-8'}
 	r = requests.get(url=u+d,headers=h)
 	global dishes_db
 	df = pd.read_json(d, orient = 'records')
 	for row in df.itertuples():
 		row.link.replace("_","/")
-	#print(dishes_db)
+	print(df)
 	dishes_db = dishes_db.append(df,ignore_index=True)
 	#print(dishes_db)
 	xyz = dishes_db.to_json(orient='index')
@@ -507,7 +507,7 @@ def add_dish(d):
 @app.route('/delete_dish/<name>')
 def delete_dish(name):
 	global dishes_db
-	u = 'http://0.0.0.0:4000/deletingdish/'
+	u = 'http://0.0.0.0:7000/deletingdish/'
 	h ={ 'content-type': 'application/json; charset=utf-8'}
 	r = requests.get(url=u+name,headers=h)
 	name = json.loads(name)
@@ -614,7 +614,7 @@ def store_the_dishes():
 
 			dishes_db_new["name"].append(dish.replace(" ","_").lower().replace("(","").replace(")",""))
 			dishes_db_new["stock"].append("In")
-			s = 'http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/img/db/'
+			s = 'http://ec2-13-126-89-61.ap-south-1.compute.amazonaws.com/img/db/'
 			dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","") + ".jpg")
 
 			if dish in dishes_dicti:
@@ -896,7 +896,7 @@ def set_confirm(identity,d):
 def refresh_stock():
 	global dishes_db
 	dishes_db = dishes_db.replace("Out","In")
-	u = 'http://0.0.0.0:4000/refreshing'
+	u = 'http://0.0.0.0:7000/refreshing'
 	h ={ 'content-type': 'application/json; charset=utf-8'}
 	r = requests.get(url=u,headers=h)
 	print dishes_db
@@ -904,8 +904,11 @@ def refresh_stock():
 @app.route('/outofstock/<dname>')
 def outstock(dname):
 	dname = dname.lower().replace(" ","_")
-	dishes_db.loc[dishes_db['name']==dname,'stock'] = 'Out'
-	u = 'http://0.0.0.0:4000/outofstock/'
+	if(dishes_db[dishes_db['name']==dname]['stock'].tolist()[0]== 'In'):
+		dishes_db.loc[dishes_db['name']==dname,'stock'] = 'Out'
+	elif(dishes_db[dishes_db['name']==dname]['stock'].tolist()[0]== 'Out'):
+		dishes_db.loc[dishes_db['name']==dname,'stock'] = 'In'
+	u = 'http://0.0.0.0:7000/outofstock/'
 	h ={ 'content-type': 'application/json; charset=utf-8'}
 	r = requests.get(url=u+dname,headers=h)
 	#print dishes_db
