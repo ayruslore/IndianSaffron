@@ -615,7 +615,7 @@ def store_the_dishes():
 			dishes_db_new["name"].append(dish.replace(" ","_").lower().replace("(","").replace(")",""))
 			dishes_db_new["stock"].append("In")
 			s = 'http://ec2-13-126-89-61.ap-south-1.compute.amazonaws.com/img/db/'
-			dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","") + ".jpg")
+			dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
 
 			if dish in dishes_dicti:
 				dishes_db_new["count"].append(dishes_dicti[dish.replace(" ","_").lower().replace("(","").replace(")","")])
