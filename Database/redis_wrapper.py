@@ -587,35 +587,43 @@ def store_the_dishes():
 ["125","Veg","U"],"Kheer":
 ["125","Veg","U"]}}}
 	global dishes_db , dishes_dicti
+	s = 'http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco/img/db/'
 	dishes_db_new = {"name":[],"v_n":[],"base_ing":[],"course":[],"category":[],"count":[],"price":[],"link":[],"stock":[]}
 	for course in temp["Courses"]:
 		for dish in temp["Courses"][course]:
 			dishes_db_new["course"].append(course)
 			if(course == "Shorba"):
 				dishes_db_new["category"].append("shorba")
+				dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
 			elif(course == "Kebab"):
 				dishes_db_new["category"].append("kebab")
+				dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
 			elif(course == "Kathi Rolls"):
 				dishes_db_new["category"].append("kathi_roll")
+				dishes_db_new["link"].append(s + "isc_logo.jpg")
 			elif(course == "Curries"):
 				dishes_db_new["category"].append("curry")
+				dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
 			elif(course == "Dal"):
 				dishes_db_new["category"].append("dal")
+				dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
 			elif(course == "Rice"):
 				dishes_db_new["category"].append("rice")
+				dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
 			elif(course == "Roti Parantha"):
 				dishes_db_new["category"].append("roti_parantha")
+				dishes_db_new["link"].append(s + "isc_logo.jpg")
 			elif(course == "Dahi"):
 				dishes_db_new["category"].append("dahi")
+				dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
 			elif(course == "Dessert"):
 				dishes_db_new["category"].append("dessert")
+				dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
 			else:
 				dishes_db_new["category"].append("HERO")
-
+				dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
 			dishes_db_new["name"].append(dish.replace(" ","_").lower().replace("(","").replace(")",""))
 			dishes_db_new["stock"].append("In")
-			s = 'http://ec2-13-126-89-61.ap-south-1.compute.amazonaws.com/img/db/'
-			dishes_db_new["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
 
 			if dish in dishes_dicti:
 				dishes_db_new["count"].append(dishes_dicti[dish.replace(" ","_").lower().replace("(","").replace(")","")])
@@ -922,3 +930,4 @@ store_the_dishes()
 print dishes_db
 app.install(EnableCors())
 app.run(host='0.0.0.0', port=5000, debug=True,server='gevent')
+
