@@ -15,7 +15,7 @@ var Promise = require("bluebird");
 var request_1 = Promise.promisifyAll(require("request"));
 var activelink ='http://35.154.42.243:5000/';
 var recommendationLink = 'http://35.154.42.243:7000/';
-let token = 'EAAKnsCdK7eEBAIJJZAl1UZBGf7ftaufzRJ5h4g6gUMRd49Sp4jXqUIVkByc2LJ7Ro4b4hjzJBpVgFUvKu6VVplqg5UXOMrgyZCVxr7V6Q0Q7Pua0fBgA6iZCk8qCEXHByZCjR7aOUblTs2C4t8WwKQkXPFA6oIEw1EwtyA7hg67Cghkh8qG8O';
+let token = 'EAAEMKXOzVdYBAOOV40s0epLs80bRuUZBYFVNJb85XZAmslMQxPH33fgx5zwdiEGsyg8fyQEvh3hN0f84PrbyBji17ZC0DpWKxDJAVLwDPpD7vaZAZBOCKHsj0p4mSZAxwkNgOpw6olZAKajAkZA9ZBE6VsZAI7vXbSwS8vb1b1OyjxgQZDZD';
 
 
 // The rest of the code implements the routes for our Express server.
@@ -714,7 +714,7 @@ function sendReciept(recipientID,newdiscount,name,total,titles,quantity,price,ad
                                         order_number:recipientID,
                                         currency:"INR",
                                         payment_method:"Cash on Delievery",
-                                        order_url:"http://babadadhaba.co/",
+                                        order_url:"http://genii.ai/policy/ActiveBots/IndianSaffronCo/Admin",
                                         timestamp:"1428444852",
                                         elements:cards,
                                         address:{
@@ -855,7 +855,7 @@ function callSendRedisapi(tag,operation,sender,text){
                 else if(tag === 'setname'){
                         console.log("res.body");
                         var response=JSON.parse(res.body);
-                        aiText= "Hi "+ response.first_name +"!! It's nice to see you! Welcome to Baba da Dhaba! I am transformer Sardar! I custom tailor your food suggestions based on your past choices. The more you order from me, the better I get at my job.";
+                        aiText= "Hi "+ response.first_name +"!! It's nice to see you! Welcome to Indian Saffron Co.! I am your virtual butler! I custom tailor your food suggestions based on your past choices. The more you order from me, the better I get at my job.";
                         var link="http://ec2-13-126-89-61.ap-south-1.compute.amazonaws.com?userId=" + sender;
                         sendButton(sender,["postback","postback","web_url"],aiText,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                 }
