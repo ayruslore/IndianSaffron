@@ -147,7 +147,7 @@ def cancel(identity):
 
 from geopy import distance , Point
 global Hotel_locations
-Hotel_locations = {"Residency_Road":Point("12.9655 77.5989")}
+Hotel_locations = {"Vasant_kunj":Point("28.527335 77.151545")}
 #Hotel_locations = {"Residency_Road":Point("12.9655 77.5989"),"Old_Airport_Road":Point("12.9603 77.6459"),"Yelahanka":Point("13.1047 77.5844")}
 
 @app.route('/add_new_hotel/<name>/<lat>/<longi>')
@@ -163,7 +163,7 @@ def get_nearest_hotel(lat,longi):
 			dist = distance.distance(Hotel_locations[locations],p1).kilometers
 			result.append((locations,dist))
 	for a,b in result:
-		if(b<=8):
+		if(b<=10):
 			return a
 	return None
 

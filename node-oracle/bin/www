@@ -1158,6 +1158,7 @@ function callSendRedisconfirm(operation,sender){
                 var keys =[];
                 var quantity=[];
                 var price=[];
+                var oos=[];
                 console.log(res.body);
                 var dict=JSON.parse(res.body)
                 for (var key in dict) {
@@ -1170,16 +1171,21 @@ function callSendRedisconfirm(operation,sender){
                         {
                                 total=dict[key];
                         }
-                        else
+                        else if(key==='oos'){
+                                for(var i=0;i<dict[key].length;i++){
+                                        oos.push(dict[key][i]);
+                                }
+                        }
+                        else if (key==="flag")
                         {
                                 flag=dict[key];
                         }
                 }
-                CartForConfirmation(sender,keys,quantity,price,total,flag);
+                CartForConfirmation(sender,keys,quantity,price,total,flag,oos);
         });
 }
 
-function CartForConfirmation(sender,keys,quantity,price,total,flag)
+function CartForConfirmation(sender,keys,quantity,price,total,flag,oos)
 {
         var msg='';
         if(keys.length!=0){
@@ -1190,7 +1196,14 @@ function CartForConfirmation(sender,keys,quantity,price,total,flag)
                         //k=keys[i].replace(/_/g, " ")
                         msg = msg + toTitleCase(keys[i].replace(/_/g, " " )) + '(' + price[i] + ')' + ' x ' + quantity[i] + ''+ '\n';
                 }
-                msg = msg + 'Total value: ' + total;
+                if (oos.length!=0)
+                {
+                        var d= "We are sorry but the following items have gone out of stock: ";
+                        for(var i=0;i<oos.length;i++){
+                                d+=  toTitleCase(oos[i].replace(/_/g, ' '))+ "\n";
+                        }
+                }
+                msg = msg + 'Your total bill before discount is: ' + total;
                 if (flag)
                 {
                         sendButton(sender,["postback", "postback", "postback"],msg,["Confirm_bypass", "Confirm_Yes",  "Clear_cart", ],["Confirm with saved details", "Confirm with new details", "Clear cart"],"tall");
