@@ -53,21 +53,56 @@ def reco_filter(v_n,base_ing,category):
 	result = {"reco": result['name'].tolist()[:5],"links":result['link'].tolist()[:5],"prices":result['price'].tolist()[:5]}
 	return result
 
+global specials_db
+temp = {"Courses":{"Kebabs":{"Murg Hariyali Kebab":["295","Non Veg","chicken"],
+"Murg Kali Mirch Kebab":["295","Non Veg","chicken"],
+"Patiala Tangri Kebab":["315","Non Veg","chicken"],
+"Hara Bhara Kebab":["255","Veg","U"],
+"Tandoori Gobi":["255","Veg","gobi"]},"Curries":{
+"Punjabi Murg Curry":["425","Non Veg","chicken"],
+"Murg Masaledar":["425","Non Veg","chicken"],
+"Mutton Tak-a-tak":["425","Non Veg","mutton"],
+"Mix Vegetable":["335","Veg","U"],
+"Sarson Ka Saag":["335","Veg","U"],
+"Methi Aloo":["325","Veg","aloo"]},"Roti":{
+"Makki Ki Roti":["35","Veg","U"]},"Dessert":{
+"Gajar Ka Halwa":["145","Veg","U"]}}}
+s = 'http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco/img/db/'
+specialdb = {"name":[],"v_n":[],"base_ing":[],"course":[],"category":[],"count":[],"price":[],"link":[],"stock":[]}
+for course in temp["Courses"]:
+	for dish in temp["Courses"][course]:
+		specialdb["course"].append(course)
+		specialdb["category"].append(course)
+		specialdb["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
+		specialdb["name"].append(dish.replace(" ","_").lower().replace("(","").replace(")",""))
+		specialdb["count"].append(0)
+		specialdb["stock"].append("In")
+		count = 1
+		for data in temp["Courses"][course][dish]:
+			if (count == 1):
+				specialdb["price"].append(data)
+			if(count == 2):
+				data = data.replace(" ","").lower()
+				specialdb["v_n"].append(data)
+			if(count == 3):
+				data = data.replace(" ","_").lower()
+				specialdb["base_ing"].append(data)
+			count = count + 1
+		specials_db = pd.DataFrame.from_dict(specialdb, orient='index')
+		a1_db = specials_db.transpose()
+		specials_db = a1_db
+
 @app.route('/specials')
 def special():
-	global dishes_db
-	specials = ['makai_ke_kebab','noorani_tangri_kebab','mirch_ka_salan','chicken_wings_masala']
-	print specials
-	#result = dishes_db[dishes_db['stock']=='In']
-	#print result
+	global specials_db
 	result = {"reco":[],"links":[],"prices":[]}
-	for dish in specials:
-		print dish
-		res = dishes_db[dishes_db["name"] == dish]
-		print res
-		result["reco"].append(res["name"].tolist()[0])
-		result["prices"].append(res["price"].tolist()[0])
-		result["links"].append(res["link"].tolist()[0])
+	print specials_db
+	for dish in specials_db["name"].tolist():
+		res = specials_db[specials_db["name"]==dish]
+		if(res["stock"].tolist()[0]=='In'):
+			result["reco"].append(res["name"].tolist()[0])
+			result["prices"].append(res["price"].tolist()[0])
+			result["links"].append(res["link"].tolist()[0])
 	print result
 	yield json.dumps(result)
 
@@ -179,6 +214,7 @@ def user_details(identity):
 #Roti Parantha  parantha
 #Dahi dahi
 #Dessert  dessert
+
 @app.route('/set_menu')
 def store_the_dishes():
 	temp =  {"Courses":{"Shorba":{"Tamatar Dhaniya Ka Shorba":

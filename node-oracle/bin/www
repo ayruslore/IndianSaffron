@@ -13,9 +13,9 @@ var messengerButton = "<html><head><title>Facebook Messenger Bot</title></head><
 var http = require('http');
 var Promise = require("bluebird");
 var request_1 = Promise.promisifyAll(require("request"));
-var activelink ='http://35.154.42.243:5000/';
-var recommendationLink = 'http://35.154.42.243:7000/';
-let token = 'EAAEMKXOzVdYBAOOV40s0epLs80bRuUZBYFVNJb85XZAmslMQxPH33fgx5zwdiEGsyg8fyQEvh3hN0f84PrbyBji17ZC0DpWKxDJAVLwDPpD7vaZAZBOCKHsj0p4mSZAxwkNgOpw6olZAKajAkZA9ZBE6VsZAI7vXbSwS8vb1b1OyjxgQZDZD';
+var activelink ='http://0.0.0.0:5000/';
+var recommendationLink = 'http://0.0.0.0:7000/';
+let token = 'EAADv4RNR974BAPyZBC8mA4U0ZAjz72AQiGaulmXFAjnoZCNyymvQdqZA5UErZBi9VQgkF4MZAjS7u0CZCg1yzZBGnZBs5KZAUNZCtJTOG2mPPQ5DctsQ4opFhd8VcxvUsPYlZC8XxL1zFtUHkf6okQE7TEEZAFhZBEKeW0MGZCZCeJKlNkEnwQZDZD';
 
 
 // The rest of the code implements the routes for our Express server.
@@ -183,7 +183,7 @@ function sendMessage(event){
                         callrecommend(final,sender);
                 }
                 else if(response.result.action==='order.webview'){
-                        var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco" + "?userId=" + sender;
+                        var link="http://localhost" + "?userId=" + sender;
                         sendButton(sender,["web_url"],"what would to like to have?",[link],["Show Menu!"],"tall");
                         //open webview
                 }
@@ -234,7 +234,7 @@ function sendMessage(event){
                 }
                 else if(response.result.action==='show.menu'){
                         //webview
-                        var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco" + "?userId=" + sender;
+                        var link="http://localhost" + "?userId=" + sender;
                         sendButton(sender,["web_url"],"what would to like to have?",[link],["Show Menu!"],"tall");
                 }
                 else if(response.result.action==='order.cancel'){
@@ -263,7 +263,7 @@ function sendMessage(event){
                         callSendRedisapi('remove',final,sender,aiText);
                 }
                 else if(response.result.action==='order.payment'){
-                        sendButton(sender,["web_url"],'Make the payment',["http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco/payment.html?userid=" + sender],["CASH ON DELIEVERY"],"tall");
+                        sendButton(sender,["web_url"],'Make the payment',["http://localhost/payment.html?userid=" + sender],["CASH ON DELIEVERY"],"tall");
                 }
                 else if(response.result.action==='viewcart'){
                         var show = 'get_cart_price/'+sender;
@@ -468,7 +468,7 @@ function QuickReplyParser(sender, payload)
                 callrecommend(recommendationLink+ sender + '/get_history_reco',sender);
         }
         else if (payload==='Show_menu'){
-                var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco" + "?userId=" + sender;
+                var link="http://localhost" + "?userId=" + sender;
                 sendButton(sender,["web_url"],"what would to like to have?",[link],["Show Menu!"],"tall");
         }
         else if (payload==='Show_cart'){
@@ -788,7 +788,7 @@ function callSendRedisapi(tag,operation,sender,text){
                 // Adding it to our body
                 if(err) throw err;
                 if (tag==='add'){
-                        var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                        var link="http://localhost?userId=" + sender;
                         //  sendButton(sender,["postback","postback","web_url"],message,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                           var response=JSON.parse(res.body);
                           console.log(response);
@@ -796,7 +796,7 @@ function callSendRedisapi(tag,operation,sender,text){
                           if(response.oos.length!=0){
                             var aiText = "Sorry, we dont have "+toTitleCase(response.oos[0].replace(/_/g, " " )) +" right now";
                           //  sendTextMessage(sender,aiText);
-                              var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                              var link="http://localhost?userId=" + sender;
                         sendButton(sender,["postback","postback","web_url"],aiText,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                     }
 
@@ -836,11 +836,11 @@ function callSendRedisapi(tag,operation,sender,text){
                 }*/}
 
                 else if (tag==='payment'){
-                        link= "http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco/payment.html?userid"+sender;
+                        link= "http://localhost/payment.html?userid"+sender;
                         sendButton(sender,["web_url"],'how would you like to pay?',[link],["Payments"],"tall");
                 }
                 else if (tag==='cancel'){
-                        var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                        var link="http://localhost?userId=" + sender;
                         sendButton(sender,["postback","postback","web_url"],Text1,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                 }
                 else if (tag==='remove'){
@@ -856,7 +856,7 @@ function callSendRedisapi(tag,operation,sender,text){
                         console.log("res.body");
                         var response=JSON.parse(res.body);
                         aiText= "Hi "+ response.first_name +"!! It's nice to see you! Welcome to Indian Saffron Co.! I am your virtual butler! I custom tailor your food suggestions based on your past choices. The more you order from me, the better I get at my job.";
-                        var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                        var link="http://localhost?userId=" + sender;
                         sendButton(sender,["postback","postback","web_url"],aiText,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                 }
                 else if(tag=== 'existing'){
@@ -869,7 +869,7 @@ function callSendRedisapi(tag,operation,sender,text){
                         else if (response.usual==="Nothing")
                         {
                                 aiText="Hi "+response.name+"!! I notice you haven't ordered anything with us yet. You should really try some of our food. It is nice to see you back though! What can I help you with today?";
-                                var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                                var link="http://localhost?userId=" + sender;
                                // sendTextMessage(sender)
                                 sendButton(sender,["postback","postback","web_url"],aiText,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                         }
@@ -890,7 +890,7 @@ function callSendRedisapi(tag,operation,sender,text){
                                 else {
                                         message= "Hi "+ name +". It's nice to see you again! I see that you havent ordered from us in over "+ time +" days. It's nice to see you back. Here are your ususals! Be sure to tell me if I can help you out with anything else!!";
                                 }
-                                var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                                var link="http://localhost?userId=" + sender;
                                 sendButton(sender,["postback","postback","web_url"],message,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                                 //sendTextMessage(message);
                                 var i;
@@ -928,7 +928,7 @@ function callSendRedisapi(tag,operation,sender,text){
                         else if (response.usual==="Nothing")
                         {
                                 aiText= "I notice you haven't ordered anything with us yet. You should really try some of our food. We dont know your usuals yet.";
-                                var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                                var link="http://localhost?userId=" + sender;
                                 sendTextMessage(sender,aiText);
                               //  sendButton(sender,["postback","postback","web_url"],aiText,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                         }
@@ -1015,7 +1015,7 @@ function callSendRedisapi(tag,operation,sender,text){
                         }
                         else{
                                 aiText="Sorry,your cart is empty.Would you like to order something?";
-                                var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                                var link="http://localhost?userId=" + sender;
                                 console.log("else codntiotn");
                                 sendButton(sender,["postback","postback","web_url"],aiText,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                         }
@@ -1044,7 +1044,7 @@ function callSendRedisapi(tag,operation,sender,text){
                         }
                         else{
                                 aiText="Sorry,your cart is empty.Would you like to order something?";
-                                var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                                var link="http://localhost?userId=" + sender;
                                 console.log("else codntiotn");
                                 sendButton(sender,["postback","postback","web_url"],aiText,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                         }
@@ -1082,7 +1082,7 @@ function callSendRedis(operation,sender){
                 if ((res.body==='{}') || (JSON.parse(res.body).total===0))
                 {
                         aiText="I am sorry but you have no items in your cart";
-                        var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                        var link="http://localhost?userId=" + sender;
                         sendButton(sender,["postback","postback","web_url"],aiText,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
                 }
                 else{
@@ -1117,7 +1117,7 @@ function callSendRedis(operation,sender){
                         c+="Total Value: "+dict['total']+'\n';
                       //  c+=d;
                         //c+="You can add or remove dishes by texting us the name and quantity of the dish or using the below button!";
-                        var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                        var link="http://localhost?userId=" + sender;
                         sendButton(sender,["web_url","postback","postback"],c,[link,"Clear_cart","Confirm_order"],["Add/Change Dishes", "Clear cart", "Confirm order"],"tall");
 
 
@@ -1137,7 +1137,7 @@ function callSendRedisAddress(operation,sender){
                         sendTextMessage(sender,"We are sorry but we currently do not serve in your area. Please try again later.")
                 }
                 else {
-                        var link= "http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco/payment.html?userid="+sender;
+                        var link= "http://localhost/payment.html?userid="+sender;
                         sendButton(sender,["web_url"],'how would you like to pay?',[link],["Payments"],"tall");
                 }
 
@@ -1215,7 +1215,7 @@ function CartForConfirmation(sender,keys,quantity,price,total,flag,oos)
         }
         else{
                 aiText="Sorry,your cart is empty.Would you like to order something?";
-                var link="http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco?userId=" + sender;
+                var link="http://localhost?userId=" + sender;
                 console.log("else codntiotn");
                 sendButton(sender,["postback","postback","web_url"],aiText,["Show_specials","Recommend",link],["Specials", "Recommendations", "Menu"],"tall");
         }

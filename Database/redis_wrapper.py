@@ -794,7 +794,6 @@ def get_reciept(identity):
 	total = get_cart_price1(identity)
 	data['cart'] = total
 	data['name'] = get_hash_field(key,"name").replace("_"," ")
-
 	key = "user:"+str(identity)+":cart_status"
 	data['order_status'] = get_key(key)
 	yield json.dumps(data)
@@ -930,4 +929,3 @@ store_the_dishes()
 print dishes_db
 app.install(EnableCors())
 app.run(host='0.0.0.0', port=5000, debug=True,server='gevent')
-
