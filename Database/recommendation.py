@@ -14,7 +14,6 @@ import requests
 import redis_functions as rd
 from redis_functions import *
 global dishes_db
-
 i1 = open('dishes15.txt','r').read()
 df = pd.read_json(json.loads(i1),orient='index')
 dishes_db = df
@@ -69,12 +68,17 @@ temp = {"Courses":{"Kebabs":{"Murg Hariyali Kebab":["295","Non Veg","chicken"],
 "Gajar Ka Halwa":["145","Veg","U"]}}}
 s = 'http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco/img/db/'
 specialdb = {"name":[],"v_n":[],"base_ing":[],"course":[],"category":[],"count":[],"price":[],"link":[],"stock":[]}
+noimg = ["murg_masaledar","makki_ki_roti","mutton_tak-a-tak","mix_vegetable"]
 for course in temp["Courses"]:
 	for dish in temp["Courses"][course]:
+		dish1 = dish.replace(" ","_").lower().replace("(","").replace(")","")
 		specialdb["course"].append(course)
 		specialdb["category"].append(course)
-		specialdb["link"].append(s + dish.replace(" ","-").replace("(","").replace(")","").upper() + ".jpg")
-		specialdb["name"].append(dish.replace(" ","_").lower().replace("(","").replace(")",""))
+		if dish1 in noimg:
+			specialdb["link"].append(s + "isc_logo.jpg")
+		else:
+			specialdb["link"].append(s + dish.upper().replace(" ","-") + ".jpg")
+		specialdb["name"].append(dish1)
 		specialdb["count"].append(0)
 		specialdb["stock"].append("In")
 		count = 1
@@ -91,19 +95,24 @@ for course in temp["Courses"]:
 		specials_db = pd.DataFrame.from_dict(specialdb, orient='index')
 		a1_db = specials_db.transpose()
 		specials_db = a1_db
+#dishes_db = dishes_db.append(specials_db,ignore_index=True)
+
+@app.route('/getspecials')
+def getspecial():
+	global specials_db
+	return specials_db.to_json(orient="records")
 
 @app.route('/specials')
 def special():
 	global specials_db
 	result = {"reco":[],"links":[],"prices":[]}
 	print specials_db
-	for dish in specials_db["name"].tolist():
+	for dish in random.sample(specials_db["name"].tolist(),10):
 		res = specials_db[specials_db["name"]==dish]
 		if(res["stock"].tolist()[0]=='In'):
 			result["reco"].append(res["name"].tolist()[0])
 			result["prices"].append(res["price"].tolist()[0])
 			result["links"].append(res["link"].tolist()[0])
-	print result
 	yield json.dumps(result)
 
 @app.route('/<identity>/get_history_reco')
@@ -394,8 +403,8 @@ def refresh_stock():
 	return json.dumps('Success')
 
 
+#store_the_dishes()
 
-store_the_dishes()
 app.install(EnableCors())
 
 app.run(host='0.0.0.0', port=7000, debug=True, server='gevent')

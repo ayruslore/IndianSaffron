@@ -147,7 +147,7 @@ def cancel(identity):
 
 from geopy import distance , Point
 global Hotel_locations
-Hotel_locations = {"Vasant_kunj":Point("28.527335 77.151545")}
+Hotel_locations = {"Vasant_kunj":Point("28.5195110 77.1665260")}
 #Hotel_locations = {"Residency_Road":Point("12.9655 77.5989"),"Old_Airport_Road":Point("12.9603 77.6459"),"Yelahanka":Point("13.1047 77.5844")}
 
 @app.route('/add_new_hotel/<name>/<lat>/<longi>')
@@ -163,7 +163,7 @@ def get_nearest_hotel(lat,longi):
 			dist = distance.distance(Hotel_locations[locations],p1).kilometers
 			result.append((locations,dist))
 	for a,b in result:
-		if(b<=10):
+		if(b<=5):
 			return a
 	return None
 
@@ -647,7 +647,6 @@ def store_the_dishes():
 	dishes_db = a_db
 	#print(type(dishes_db))
 	xyz = a_db.to_json(orient='index')
-	#pprint(xyz)
 	with open('dishes15.txt','w') as outfile:
 		json.dump(xyz, outfile)
 
@@ -777,7 +776,7 @@ def get_new_reciept(dic):
 	data['cart'] = total
 	data["address"] = data["address"].replace("_"," ")
 	data['name'] = data["name"].replace("_"," ")
-	data['discount']
+	#data['discount']
 	key = "user:"+str(identity)+":cart_status"
 	data['order_status'] = get_key(key)
 	yield json.dumps(data)
@@ -926,6 +925,53 @@ df = pd.read_json(json.loads(i1),orient='index')
 global dishes_db
 dishes_db = df
 store_the_dishes()
+global specials_db
+temp = {"Courses":{"Kebabs":{"Murg Hariyali Kebab":["295","Non Veg","chicken"],
+"Murg Kali Mirch Kebab":["295","Non Veg","chicken"],
+"Patiala Tangri Kebab":["315","Non Veg","chicken"],
+"Hara Bhara Kebab":["255","Veg","U"],
+"Tandoori Gobi":["255","Veg","gobi"]},"Curries":{
+"Punjabi Murg Curry":["425","Non Veg","chicken"],
+"Murg Masaledar":["425","Non Veg","chicken"],
+"Mutton Tak-a-tak":["425","Non Veg","mutton"],
+"Mix Vegetable":["335","Veg","U"],
+"Sarson Ka Saag":["335","Veg","U"],
+"Methi Aloo":["325","Veg","aloo"]},"Roti":{
+"Makki Ki Roti":["35","Veg","U"]},"Dessert":{
+"Gajar Ka Halwa":["145","Veg","U"]}}}
+s = 'http://ec2-35-154-42-243.ap-south-1.compute.amazonaws.com/activebots/indiansaffronco/img/db/'
+specialdb = {"name":[],"v_n":[],"base_ing":[],"course":[],"category":[],"count":[],"price":[],"link":[],"stock":[]}
+noimg = ["murg_masaledar","makki_ki_roti","mutton_tak-a-tak","mix_vegetable"]
+for course in temp["Courses"]:
+	for dish in temp["Courses"][course]:
+		dish1 = dish.replace(" ","_").lower().replace("(","").replace(")","")
+		specialdb["course"].append(course)
+		specialdb["category"].append(course)
+		if dish1 in noimg:
+			specialdb["link"].append(s + "isc_logo.jpg")
+		else:
+			specialdb["link"].append(s + dish.upper().replace(" ","-") + ".jpg")
+		specialdb["name"].append(dish1)
+		specialdb["count"].append(0)
+		specialdb["stock"].append("In")
+		count = 1
+		for data in temp["Courses"][course][dish]:
+			if (count == 1):
+				specialdb["price"].append(data)
+			if(count == 2):
+				data = data.replace(" ","").lower()
+				specialdb["v_n"].append(data)
+			if(count == 3):
+				data = data.replace(" ","_").lower()
+				specialdb["base_ing"].append(data)
+			count = count + 1
+		specials_db = pd.DataFrame.from_dict(specialdb, orient='index')
+		a1_db = specials_db.transpose()
+		specials_db = a1_db
+dishes_db = dishes_db.append(specials_db,ignore_index=True)
+xyz = dishes_db.to_json(orient='index')
+with open('dishes15.txt','w') as outfile:
+	json.dump(xyz, outfile)
 print dishes_db
 app.install(EnableCors())
 app.run(host='0.0.0.0', port=5000, debug=True,server='gevent')
