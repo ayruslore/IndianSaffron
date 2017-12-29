@@ -14,7 +14,7 @@ var Promise = require("bluebird");
 var request_1 = Promise.promisifyAll(require("request"));
 var activelink ='http://35.154.42.243:5000/';
 var recommendationLink = 'http://35.154.42.243:7000/';
-let token = 'EAAEMKXOzVdYBAMOV1bISEtQP2VCRuxEt3EQkepoxa8okvGoCQZA2ivEAOw4PX3gQvWB5yfppANiV2onQZCTM5dsBIU5ZC5ORwFpFWDuSYk41hVzF6bDTjTZBxUGlfvmuHJI9UdlnXxdZAwbq5yKDX3RWNEdzx83wchCaDXPndwgZDZD';
+let token = 'EAAHdua7I9ZAsBANp3wtOB75tGaOCLVUI0pRqAwLLX6nNnX64eTfTZCEpMZCSCXmuPy0ww8h40In3rd7ZCGWNZA4IpvY93D4LfhAGoxYXo7BuYHaZCfOzFZC6mczkInJ77ZBT5ZB8ZBFCRvjqZBH49DR85NzQLTb1Up7Qfb8RzsZC5Q3VRxR4FNPIhJP4';
 
 
 // The rest of the code implements the routes for our Express server.
@@ -107,9 +107,21 @@ app.post('/', function (req, res) {
                 data.entry.forEach(function(entry) {
                         var pageID = entry.id;
                         var timeOfEvent = entry.time;
+                        console.log(timeOfEvent);
+                        var date = new Date(timeOfEvent*1000);
+                        // Hours part from the timestamp
+                        var hours = date.getHours() ;
+                        // Minutes part from the timestamp
+                        var minutes = "0" + date.getMinutes();
+                        // Seconds part from the timestamp
+                        var seconds = "0" + date.getSeconds();
 
+                        // Will display time in 10:30:23 format
+                        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                        console.log(formattedTime);
                         // Iterate over each messaging event
                         entry.messaging.forEach(function(event) {
+                                console.log(event.message);
                                 if (event.message) {
                                         if(("quick_reply" in event.message)==true){
                                                 QuickReplyParser(event.sender.id, event.message.quick_reply.payload);
@@ -148,15 +160,33 @@ app.post('/', function (req, res) {
 function sendMessage(event){
         let sender=event.sender.id;
         let text=event.message.text;
+        let times=event.sender.timestamp;
+      //  console.log(times);
+      //  var start=times.search('T');
+
         let apiai = apiaiApp.textRequest(text, {
                 sessionId: sender // use any arbitrary id
         });
-
+      //  var word =times.substring(start,16);
+        //console.log(word);
+        var open=0;
+        console.log("analyze");
+        var time =new Date().getHours();
+      //  time.toString();
+        console.log(new Date().getMinutes());
+          if(time<3 && time>18){
+            open=1;
+          }
+          else if(time==3 && new Date().getMinutes()>30){
+            open=1;
+          }
         //sending response to facebook
+        if(open==1){
         apiai.on('response', (response) => {
                 console.log(response);
                 //whenever we have something we can tell about we'll drag them to our recommendation engine
                 //recommend.specials,recommend.dish
+
 
                 if(response.result.action==='recommend.specials'){
                         //cards
@@ -318,6 +348,10 @@ function sendMessage(event){
                 console.log(error);
         });
         apiai.end();
+      }
+      else{
+        sendTextMessage(sender,"We are closed right now");
+      }
 }
 
 
